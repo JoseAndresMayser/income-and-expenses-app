@@ -58,8 +58,17 @@
             <div class="form-group">
               <button type="submit"
                       class="btn btn-primary submit-btn btn-block"
-                      [disabled]="registrationFormGroup.invalid">
+                      [disabled]="registrationFormGroup.invalid"
+                      *ngIf="!isLoading">
                 Create account
+              </button>
+
+              <button type="submit"
+                      class="btn btn-primary submit-btn btn-block"
+                      [disabled]="true"
+                      *ngIf="isLoading">
+                <i class="fa fa-spin fa-sync"></i>
+                Registering...
               </button>
             </div>
 

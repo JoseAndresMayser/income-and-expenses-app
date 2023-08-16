@@ -4,46 +4,63 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 import firebase from "firebase/compat";
 import UserCredential = firebase.auth.UserCredential;
 import {SignInRequest} from "../interfaces/requests/sign-in-request.interface";
-import {map, Observable} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
 import {User} from "../models/user.model";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {Store} from "@ngrx/store";
+import {AppState} from "../state/app-state.interface";
+import {authActions} from "../state/auth/auth.actions";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
-    constructor(private _angularFireAuth: AngularFireAuth,
-                private _firestore: AngularFirestore) {
-    }
+  private _userSubscription?: Subscription;
 
-    public initAuthListener(): void {
-        this._angularFireAuth.authState.subscribe(user => {
-            console.log(user);
+  constructor(private _angularFireAuth: AngularFireAuth,
+              private _firestore: AngularFirestore,
+              private _store: Store<AppState>) {
+  }
+
+  public initAuthListener(): void {
+    this._angularFireAuth.authState.subscribe(user => {
+      if (!user) {
+        this._userSubscription?.unsubscribe();
+        this._store.dispatch(authActions.removeUser());
+        console.log('Removing User');
+        return;
+      }
+      this._userSubscription = this._firestore.doc(`${user.uid}/users`).valueChanges()
+        .subscribe(firestoreUser => {
+          const user: User = firestoreUser as User;
+          this._store.dispatch(authActions.setUser({user}));
+          console.log('Setting User');
         });
-    }
+    });
+  }
 
-    public createUser(request: CreateUserRequest): Promise<void> {
-        return this._angularFireAuth.createUserWithEmailAndPassword(request.email, request.password)
-            .then(({user}) => {
-                if (!user || !user.email) {
-                    return;
-                }
-                const newUser: User = new User(user.uid, request.name, user.email);
-                return this._firestore.doc(`${user.uid}/users`).set({...newUser});
-            });
-    }
+  public createUser(request: CreateUserRequest): Promise<void> {
+    return this._angularFireAuth.createUserWithEmailAndPassword(request.email, request.password)
+      .then(({user}) => {
+        if (!user || !user.email) {
+          return;
+        }
+        const newUser: User = new User(user.uid, request.name, user.email);
+        return this._firestore.doc(`${user.uid}/users`).set({...newUser});
+      });
+  }
 
-    public signIn(request: SignInRequest): Promise<UserCredential> {
-        return this._angularFireAuth.signInWithEmailAndPassword(request.email, request.password);
-    }
+  public signIn(request: SignInRequest): Promise<UserCredential> {
+    return this._angularFireAuth.signInWithEmailAndPassword(request.email, request.password);
+  }
 
-    public signOut(): Promise<void> {
-        return this._angularFireAuth.signOut();
-    }
+  public signOut(): Promise<void> {
+    return this._angularFireAuth.signOut();
+  }
 
-    public isAuth(): Observable<boolean> {
-        return this._angularFireAuth.authState.pipe(
-            map(user => !!user)
-        );
-    }
+  public isAuth(): Observable<boolean> {
+    return this._angularFireAuth.authState.pipe(
+      map(user => !!user)
+    );
+  }
 }
