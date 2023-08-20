@@ -5,7 +5,6 @@ import {Store} from "@ngrx/store";
 import {AppState} from "../../state/app-state.interface";
 import {User} from "../../models/user.model";
 import {Subscription} from "rxjs";
-import {user} from "@angular/fire/auth";
 
 @Component({
   selector: 'app-sidebar',
@@ -42,7 +41,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           return;
         }
         this.user = user;
-      })
+      });
   }
 
   private _finalize(): void {

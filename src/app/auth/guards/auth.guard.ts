@@ -1,4 +1,4 @@
-import {CanActivateFn, CanMatchFn, Router} from '@angular/router';
+import {CanMatchFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
 import {AuthService} from "../../services/auth.service";
 import {take, tap} from "rxjs";
