@@ -2,22 +2,32 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Detalle de ingreso egreso</h4>
+        <h4 class="card-title">Income Expense Detail</h4>
         <table class="table">
           <thead>
           <tr>
-            <th>Descripción</th>
-            <th>Monto</th>
-            <th>Tipo</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Type</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>Descripción</td>
-            <td>Monto</td>
-            <td>Tipo</td>
-            <td>acciones</td>
+          <tr *ngFor="let item of incomeAndExpenses">
+            <td>{{item.incomeExpense.description}}</td>
+            <td>{{item.incomeExpense.amount | currency}}</td>
+            <td [class.text-success]="item.incomeExpense.type === 'INCOME'"
+                [class.text-danger]="item.incomeExpense.type === 'EXPENSE'">
+              {{item.incomeExpense.type}}
+            </td>
+            <td>
+              <button type="button"
+                      class="btn btn-danger"
+                      (click)="removeIncomeExpense(item)">
+                <i class="fa fa-trash"></i>
+                Remove
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>

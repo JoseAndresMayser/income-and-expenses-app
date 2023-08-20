@@ -20,6 +20,7 @@ import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {StoreModule} from "@ngrx/store";
 import {appReducer} from "./state/app.reducer";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {NgChartsModule} from "ng2-charts";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
-    })
+    }),
+    NgChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

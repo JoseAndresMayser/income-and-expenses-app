@@ -8,8 +8,8 @@
             <img src="assets/images/faces/face1.jpg" alt="profile image">
           </div>
 
-          <div class="text-wrapper">
-            <p class="profile-name">Cristobal Colón</p>
+          <div class="text-wrapper" *ngIf="user">
+            <p class="profile-name">{{user.name}}</p>
             <div>
               <small class="designation text-muted">Gerente</small>
             </div>
@@ -20,7 +20,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link">
+      <a class="nav-link" routerLink="/">
         <i class="menu-icon fa fa-tachometer-alt"></i>
         <span class="menu-title">Dashboard</span>
       </a>
@@ -29,14 +29,14 @@
     <li class="nav-item">
       <a class="nav-link" routerLink="/income-and-expenses">
         <i class="menu-icon fa fa-clipboard-list"></i>
-        <span class="menu-title">Ingresos y Egresos</span>
+        <span class="menu-title">Income and Expenses</span>
       </a>
     </li>
 
     <li class="nav-item">
       <a class="nav-link" routerLink="/detail">
         <i class="menu-icon fa fa-table"></i>
-        <span class="menu-title">Detalle</span>
+        <span class="menu-title">Detail</span>
       </a>
     </li>
 
