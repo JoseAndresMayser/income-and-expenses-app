@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {AppState} from "../../state/app-state.interface";
 import {IncomeExpenseData} from "../../interfaces/income-expense-data.interface";
 import {IncomeExpense} from "../../models/income-expense.model";
-import {ChartData, ChartEvent, ChartType} from "chart.js";
+import {ChartData, ChartType} from "chart.js";
+import {AppStateWithIncomeExpense} from "../../state/income-expense/app-state-with-income-expense.interface";
 
 @Component({
   selector: 'app-statistics',
@@ -19,28 +19,7 @@ export class StatisticsComponent implements OnInit {
   public doughnutChartData: ChartData<'doughnut'>;
   public doughnutChartType: ChartType;
 
-  // events
-  public chartClicked({
-                        event,
-                        active,
-                      }: {
-    event: ChartEvent;
-    active: object[];
-  }): void {
-    console.log(event, active);
-  }
-
-  public chartHovered({
-                        event,
-                        active,
-                      }: {
-    event: ChartEvent;
-    active: object[];
-  }): void {
-    console.log(event, active);
-  }
-
-  constructor(private _store: Store<AppState>) {
+  constructor(private _store: Store<AppStateWithIncomeExpense>) {
     this.totalIncome = 0;
     this.totalExpenses = 0;
     this.incomeAmount = 0;

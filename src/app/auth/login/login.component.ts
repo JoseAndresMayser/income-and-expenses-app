@@ -40,14 +40,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this._store.dispatch(uiActions.startLoading());
-
-    // SweetAlert.fire({
-    //     title: 'Login in progress!',
-    //     didOpen: () => {
-    //         SweetAlert.showLoading()
-    //     }
-    // });
-
     const {email, password} = this.loginFormGroup.value;
     const request: SignInRequest = {
       email,
@@ -55,7 +47,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     };
     this._authService.signIn(request)
       .then(() => {
-        // SweetAlert.close();
         this._store.dispatch(uiActions.stopLoading());
         this._router.navigate(['/']);
       })
